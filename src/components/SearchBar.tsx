@@ -1,8 +1,9 @@
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { products } from '../data/products';
+import { debounce } from '@/lib/utils';
 
 interface SearchBarProps {
   onSearch?: () => void;
@@ -13,6 +14,31 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
   const [searchResults, setSearchResults] = useState<typeof products>([]);
   const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
+
+  // Debounced search function
+  const debouncedSearch = useCallback(
+    debounce((query: string) => {
+      if (query.trim().length > 0) {
+        const results = products.filter(product => 
+          product.title.toLowerCase().includes(query.toLowerCase()) || 
+          product.description.toLowerCase().includes(query.toLowerCase())
+        );
+        
+        setSearchResults(results);
+        setIsSearching(true);
+      } else {
+        setSearchResults([]);
+        setIsSearching(false);
+      }
+    }, 300),
+    []
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    debouncedSearch(query);
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +68,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
             type="text"
             placeholder="Search for products, categories, or sellers..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleInputChange}
             className="w-full px-4 py-3 pl-12 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
           />
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -55,7 +81,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
         </button>
       </form>
       
-      {isSearching && (
+      {isSearching && searchQuery.trim().length > 0 && (
         <div className="mt-6 space-y-4 animate-fade-up">
           <h3 className="text-lg font-medium">Search Results</h3>
           <div className="space-y-2">

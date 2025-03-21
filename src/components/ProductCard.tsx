@@ -29,6 +29,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <img 
             src={product.images[0]} 
             alt={product.title}
+            loading="lazy"
             className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${
               imageLoaded ? 'image-loaded' : 'image-loading'
             }`}
@@ -66,7 +67,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <div className="mt-3 flex justify-between items-center text-xs text-gray-500">
             <div>Listed: {formatDate(product.listedDate)}</div>
             <div>
-              Seller: <span className="text-primary">{seller?.companyName}</span>
+              Seller: <Link to={`/seller/${seller?.id}`} className="text-primary hover:underline">{seller?.companyName}</Link>
             </div>
           </div>
         </div>

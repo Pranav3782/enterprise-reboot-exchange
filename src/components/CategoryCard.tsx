@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Category } from '../data/categories';
+import { getProductsByCategory } from '../data/products';
 
 interface CategoryCardProps {
   category: Category;
@@ -9,6 +10,7 @@ interface CategoryCardProps {
 
 const CategoryCard = ({ category }: CategoryCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const productCount = getProductsByCategory(category.id).length;
 
   return (
     <Link to={`/category/${category.slug}`} className="group">
@@ -18,6 +20,7 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
           <img 
             src={category.image} 
             alt={category.name}
+            loading="lazy"
             className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${
               imageLoaded ? 'image-loaded' : 'image-loading'
             }`}
@@ -26,6 +29,7 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
         </div>
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent z-20">
           <h3 className="text-white font-semibold text-lg">{category.name}</h3>
+          <span className="text-white/80 text-sm">{productCount} items</span>
         </div>
       </div>
       <div className="mt-2 px-1">
