@@ -40,19 +40,13 @@ const HeroSection = () => {
             </p>
           </div>
           
-          <div className={`pt-4 flex flex-col sm:flex-row gap-4 transition-all duration-500 delay-300 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className={`pt-4 transition-all duration-500 delay-300 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
             <Link 
               to="/categories" 
-              className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 group button-hover-effect"
+              className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 group button-hover-effect inline-flex"
             >
               Browse Categories
               <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link 
-              to="/featured" 
-              className="bg-white border border-gray-200 hover:border-gray-300 px-6 py-3 rounded-lg font-medium button-hover-effect"
-            >
-              Featured Listings
             </Link>
           </div>
         </div>
