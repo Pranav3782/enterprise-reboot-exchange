@@ -8,9 +8,12 @@ import { useEffect } from "react";
 import Index from "./pages/Index";
 import ProductDetail from "./pages/ProductDetail";
 import CategoryPage from "./pages/CategoryPage";
+import CategoriesPage from "./pages/CategoriesPage";
 import SellerProfile from "./pages/SellerProfile";
 import NotFound from "./pages/NotFound";
 import ScrollToTopButton from "./components/ScrollToTopButton";
+import Auth from "./pages/Auth";
+import AccountSetup from "./pages/AccountSetup";
 
 // Scroll restoration component
 const ScrollToTop = () => {
@@ -43,7 +46,10 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/product/:slug" element={<ProductDetail />} />
           <Route path="/category/:slug" element={<CategoryPage />} />
+          <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/seller/:id" element={<SellerProfile />} />
+          <Route path="/auth/:type" element={<Auth />} />
+          <Route path="/account-setup/:role" element={<AccountSetup />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ScrollToTopButton />

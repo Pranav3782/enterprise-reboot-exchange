@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Search, X } from 'lucide-react';
+import { Menu, Search, X, User } from 'lucide-react';
 import SearchBar from './SearchBar';
 
 const Navbar = () => {
@@ -42,9 +42,6 @@ const Navbar = () => {
             <Link to="/featured" className="text-sm font-medium hover:text-primary transition-colors">
               Featured
             </Link>
-            <Link to="/sellers" className="text-sm font-medium hover:text-primary transition-colors">
-              Sellers
-            </Link>
             <button 
               onClick={() => setSearchOpen(true)}
               className="text-sm font-medium hover:text-primary transition-colors"
@@ -52,6 +49,13 @@ const Navbar = () => {
               <Search size={18} />
             </button>
           </nav>
+          
+          <div className="hidden md:flex items-center space-x-4">
+            <Link to="/auth/login" className="text-sm font-medium hover:text-primary transition-colors flex items-center">
+              <User size={18} className="mr-1" />
+              Login / Register
+            </Link>
+          </div>
           
           <div className="flex md:hidden items-center space-x-4">
             <button onClick={() => setSearchOpen(true)}>
@@ -85,8 +89,9 @@ const Navbar = () => {
             <Link to="/featured" className="text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>
               Featured
             </Link>
-            <Link to="/sellers" className="text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>
-              Sellers
+            <Link to="/auth/login" className="text-lg font-medium flex items-center" onClick={() => setMobileMenuOpen(false)}>
+              <User size={18} className="mr-2" />
+              Login / Register
             </Link>
           </nav>
         </div>

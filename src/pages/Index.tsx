@@ -103,10 +103,10 @@ const Index = () => {
                 
                 <div className="pt-4">
                   <Link 
-                    to="/how-it-works" 
+                    to="/categories" 
                     className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium inline-flex items-center button-hover-effect"
                   >
-                    Learn More
+                    Browse Categories
                     <ArrowRight size={18} className="ml-2" />
                   </Link>
                 </div>
