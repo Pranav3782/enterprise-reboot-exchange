@@ -11,6 +11,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
@@ -24,6 +25,17 @@ const registerSchema = z.object({
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   role: z.enum(["buyer", "seller"]),
+  gstNumber: z.string().optional(),
+  businessPortfolioLink: z.string().url("Please enter a valid URL").optional(),
+}).refine(data => {
+  // If role is seller, gstNumber and businessPortfolioLink are required
+  if (data.role === "seller") {
+    return !!data.gstNumber && !!data.businessPortfolioLink;
+  }
+  return true;
+}, {
+  message: "GST Number and Business Portfolio Link are required for sellers",
+  path: ["role"],
 });
 
 const Auth = () => {
@@ -55,8 +67,14 @@ const Auth = () => {
       email: "",
       password: "",
       role: "buyer",
+      gstNumber: "",
+      businessPortfolioLink: "",
     },
+    mode: "onChange",
   });
+
+  // Track the selected role to conditionally show/hide fields
+  const selectedRole = registerForm.watch("role");
 
   const onLogin = (data: z.infer<typeof loginSchema>) => {
     toast({
@@ -218,6 +236,48 @@ const Auth = () => {
                           </FormItem>
                         )}
                       />
+                      
+                      {selectedRole === "seller" && (
+                        <>
+                          <FormField
+                            control={registerForm.control}
+                            name="gstNumber"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>GST Number <span className="text-red-500">*</span></FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Enter your GST number" {...field} />
+                                </FormControl>
+                                <FormDescription>
+                                  Required for seller verification
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={registerForm.control}
+                            name="businessPortfolioLink"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Business Portfolio Link <span className="text-red-500">*</span></FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    type="url" 
+                                    placeholder="https://your-business-site.com" 
+                                    {...field} 
+                                  />
+                                </FormControl>
+                                <FormDescription>
+                                  Link to your business website or portfolio
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </>
+                      )}
                       
                       <Button type="submit" className="w-full">Create Account</Button>
                     </form>
