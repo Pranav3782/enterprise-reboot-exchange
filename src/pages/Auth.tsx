@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useToast } from "@/components/ui/use-toast";
@@ -28,7 +27,6 @@ const registerSchema = z.object({
   gstNumber: z.string().optional(),
   businessPortfolioLink: z.string().url("Please enter a valid URL").optional(),
 }).refine(data => {
-  // If role is seller, gstNumber and businessPortfolioLink are required
   if (data.role === "seller") {
     return !!data.gstNumber && !!data.businessPortfolioLink;
   }
@@ -50,7 +48,6 @@ const Auth = () => {
     }
   }, [type]);
 
-  // Login form
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -59,7 +56,6 @@ const Auth = () => {
     },
   });
 
-  // Register form
   const registerForm = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -73,7 +69,6 @@ const Auth = () => {
     mode: "onChange",
   });
 
-  // Track the selected role to conditionally show/hide fields
   const selectedRole = registerForm.watch("role");
 
   const onLogin = (data: z.infer<typeof loginSchema>) => {
@@ -82,8 +77,6 @@ const Auth = () => {
       description: `Welcome back!`,
     });
     console.log("Login data:", data);
-    // Here you would typically handle the actual authentication process
-    // For demo purposes, we'll just simulate a successful login and redirect
     setTimeout(() => {
       navigate("/");
     }, 1000);
@@ -92,13 +85,16 @@ const Auth = () => {
   const onRegister = (data: z.infer<typeof registerSchema>) => {
     toast({
       title: "Registration Successful",
-      description: "Let's set up your account.",
+      description: `Your ${data.role} account has been created.`,
     });
     console.log("Register data:", data);
-    // Here you would typically handle the actual registration process
-    // For demo purposes, we'll redirect to the account setup page
+    
     setTimeout(() => {
-      navigate(`/account-setup/${data.role}`);
+      if (data.role === "buyer") {
+        navigate("/");
+      } else if (data.role === "seller") {
+        navigate(`/account-setup/${data.role}`);
+      }
     }, 1000);
   };
 
